@@ -5,7 +5,7 @@ from flask import jsonify
 from flask import flash, request
 from werkzeug import generate_password_hash, check_password_hash
 		
-@app.route('/add', methods=['POST'])
+""" @app.route('/add', methods=['POST'])
 def add_user():
 	try:
 		_json = request.json
@@ -32,39 +32,43 @@ def add_user():
 		print(e)
 	finally:
 		cursor.close() 
-		conn.close()
+		conn.close() """
 		
-@app.route('/users')
-def users():
-	try:
-		conn = mysql.connect()
-		cursor = conn.cursor(pymysql.cursors.DictCursor)
-		cursor.execute("SELECT * FROM tbl_user")
-		rows = cursor.fetchall()
-		resp = jsonify(rows)
-		resp.status_code = 200
-		return resp
-	except Exception as e:
-		print(e)
-	finally:
-		cursor.close() 
-		conn.close()
+@app.route('/Tasks')
+def tasks():
+    try:
+        conn = mysql.connect()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute("select ART.NAME_ as Name,ART.TENANT_ID_ as Kundennummer,count(*) as count from ACT_RU_TASK as ART group by ART.NAME_")
+        rows = cursor.fetchall()
+        print(rows)
+        resp = jsonify(rows)
+        resp.encoding = 'UTF-8'
+        resp.status_code = 200 
+        return resp
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close()
+        conn.close()
 		
-@app.route('/user/')
-def user(id):
-	try:
-		conn = mysql.connect()
-		cursor = conn.cursor(pymysql.cursors.DictCursor)
-		cursor.execute("SELECT * FROM tbl_user WHERE user_id=%s", id)
-		row = cursor.fetchone()
-		resp = jsonify(row)
-		resp.status_code = 200
-		return resp
-	except Exception as e:
-		print(e)
-	finally:
-		cursor.close() 
-		conn.close()
+@app.route('/task/<taskname>/count')
+def taskCount(taskname):
+    try:
+        print(taskname)
+        conn = mysql.connect()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        print(f"select '{taskname}' as Name,count(*) as count from `ACT_RU_TASK` as ART where ART.NAME_ ='{taskname}''")
+        cursor.execute(f"select '{taskname}' as Name,count(*) as count from `ACT_RU_TASK` as ART where ART.NAME_ ='{taskname}'")
+        row = cursor.fetchone()
+        resp = jsonify(row)
+        resp.status_code = 200
+        return resp
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close() 
+        conn.close()
 
 @app.route('/update', methods=['POST'])
 def update_user():

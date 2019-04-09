@@ -1,0 +1,12 @@
+%20
+http://127.0.0.1:5000/Tasks/
+http://127.0.0.1:5000/task/Adresse%20korrigieren/count
+
+
+Adresse%20korrigieren	9804	232
+Alternativen Carrier Suchen	9804	57
+Leitung überprüfen & ggfs entstören	9804	200
+Manuelle Routerprovisionierung	9804	32
+Manuelle Wita Eskalation durchführen	9804	41
+Order Stornieren	9804	85
+Wita Manuelle Bearbeitung	9804	57
