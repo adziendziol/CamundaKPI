@@ -3,7 +3,6 @@ from app import app
 from db_config import mysql
 from flask import jsonify
 from flask import flash, request
-from werkzeug import generate_password_hash, check_password_hash
 		
 """ @app.route('/add', methods=['POST'])
 def add_user():
@@ -43,8 +42,8 @@ def tasks():
         rows = cursor.fetchall()
         print(rows)
         resp = jsonify(rows)
-        resp.encoding = 'UTF-8'
-        resp.status_code = 200 
+        resp.status_code = 200
+        resp.headers["Content-Type"] = "application/json; charset=utf-8" 
         return resp
     except Exception as e:
         print(e)
@@ -52,6 +51,23 @@ def tasks():
         cursor.close()
         conn.close()
 		
+@app.route('/HistoryTasks')
+def historyTasks():
+    try:
+        conn = mysql.connect()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute(f"select AHT.NAME_ as Name,AHT.TENANT_ID_ as Kundennummer,count(*) as count from ACT_HI_TASKINST as AHT group by AHT.NAME_")
+        rows = cursor.fetchall()
+        resp = jsonify(rows)
+        resp.status_code = 200
+        resp.headers["Content-Type"] = "application/json; charset=utf-8" 
+        return resp
+    except Exception as e:
+        print(e)
+    finally:
+        cursor.close() 
+        conn.close()
+
 @app.route('/task/<taskname>/count')
 def taskCount(taskname):
     try:
@@ -69,6 +85,10 @@ def taskCount(taskname):
     finally:
         cursor.close() 
         conn.close()
+
+
+
+
 
 @app.route('/update', methods=['POST'])
 def update_user():

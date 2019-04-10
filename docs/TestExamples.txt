@@ -1,5 +1,5 @@
 %20
-http://127.0.0.1:5000/Tasks/
+http://127.0.0.1:5000/Tasks
 http://127.0.0.1:5000/task/Adresse%20korrigieren/count
 
 
