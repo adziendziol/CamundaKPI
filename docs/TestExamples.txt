@@ -10,3 +10,19 @@ Manuelle Routerprovisionierung	9804	32
 Manuelle Wita Eskalation durchführen	9804	41
 Order Stornieren	9804	85
 Wita Manuelle Bearbeitung	9804	57
+
+
+
+//Query for getting all the Events for one Business-Key
+select AHI.ACT_NAME_,AHI.`START_TIME_`,AHI.`ACT_TYPE_`,pi.`BUSINESS_KEY_` 
+from ACT_HI_ACTINST as AHI where AHI.`PROC_INST_ID_` in 
+	(select AHP.`PROC_INST_ID_` from ACT_HI_PROCINST as AHP where AHP.`BUSINESS_KEY_`=0001332116)
+and 
+AHI.`ACT_TYPE_` in ('intermediateNoneThrowEvent','startEvent','endEvent')
+and AHI.ACT_NAME_ is not null
+order by AHI.`START_TIME_` ASC
+
+
+
+//Alle anzahl der Events
+select AHI.`ACT_TYPE_` as Type, count(*) as count from ACT_HI_ACTINST as AHI group by AHI.`ACT_TYPE_`

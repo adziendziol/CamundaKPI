@@ -1,0 +1,4 @@
+pip install pymysql
+
+//ENv Activation
+source /env/bin/activate
