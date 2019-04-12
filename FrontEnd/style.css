@@ -3,9 +3,20 @@ body {
   text-align: center;
 }
 
-.wrapper {
+.wrapper{
+        display: flex;
+}
+
+.wrapper2{
   max-width: 800px;
   margin: 50px auto;
+}
+
+.first {
+    width: 500px; /* add this */
+}
+.second {
+    border: 0px solid green;
 }
 
 

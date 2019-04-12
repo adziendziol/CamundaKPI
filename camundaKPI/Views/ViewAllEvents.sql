@@ -39,7 +39,7 @@ Union
  inner join 
 `KPI` as K2 ON K2.`END_ACT_ID_` = B.`ACT_ID_`)
 
-
+--KPI-Select Statement
 Select 
 X.BusinessKey as BusinessKey,
 X.`ACT_ID_` as StartactivityID,
@@ -49,8 +49,60 @@ Y.`ACT_NAME_` as EndName,
 X.`START_TIME_` as StartTime,
 Y.`END_TIME_` as EndTime,
 X.`KPI_id` as KpiID,
-hour(TIMEDIFF(Y.`END_TIME_`,X.`START_TIME_`)) as DifferenzInStunden
- from 
+hour(TIMEDIFF(Y.`END_TIME_`,X.`START_TIME_`)) as DifferenzInStunden,
+DateDIFF(Y.`END_TIME_`,X.`START_TIME_`) as DifferenzInTagen,
+CASE WHEN (DateDIFF(Y.`END_TIME_`,X.`START_TIME_`) <= X.`KPI_VALUE`) THEN 'false'
+ELSE 'true' END as KpiBroken,
+'' as updateRun
+from 
+	(Select * from `JAR_EVENT_SELECTION_ACTIVITY_HISTORY` as A
+				inner join JAR_BK_WITH_INSTANCEIDS as O
+							ON A.`PROC_INST_ID_` = O.`InstanceID`
+				inner join `KPI` as K 
+							ON K.`START_ACT_ID_` = A.`ACT_ID_`) AS X
+	inner join  
+	(Select * from `JAR_EVENT_SELECTION_ACTIVITY_HISTORY` as B
+				inner join JAR_BK_WITH_INSTANCEIDS as I
+							ON B.`PROC_INST_ID_` = I.`InstanceID`
+				inner join `KPI` as K2 
+ 							ON K2.`END_ACT_ID_` = B.`ACT_ID_`) AS Y
+on Y.`BusinessKey`= X.`BusinessKey` and Y.`KPI_id` = X.`KPI_id`
+
+CREATE TABLE IF NOT EXISTS JAR_KPI_REPORT (
+    KPI_REPORT_ID bigint AUTO_INCREMENT, 
+    BusinessKey varchar(255) ,
+    StartactivityID VARCHAR(225) NOT NULL,
+    EndactivityID VARCHAR(225) NOT NULL,
+    StartName VARCHAR(225) NOT NULL,
+    EndName VARCHAR(225) NOT NULL,
+    StartTime date NOT NULL,
+    EndTime date NOT NULL,
+    KpiID int not null,
+    DifferenzInStunden int not null,
+    DifferenzInTagen int not null,
+    KpiBroken boolean not null,
+    updateRun date not null,
+    PRIMARY KEY (KPI_REPORT_ID)
+)  ENGINE=INNODB;
+
+
+
+INSERT INTO `JAR_KPI_REPORT` (`BusinessKey`,`StartactivityID`,`EndactivityID`,`StartName`,`EndName`,`StartTime`,`EndTime`,`KpiID`,`DifferenzInStunden`,`DifferenzInTagen`,`KpiBroken`,`updateRun`) 
+Select 
+X.BusinessKey as BusinessKey,
+X.`ACT_ID_` as StartactivityID,
+Y.`ACT_ID_` as EndactivityID,
+X.`ACT_NAME_`as StartName,
+Y.`ACT_NAME_` as EndName,
+X.`START_TIME_` as StartTime,
+Y.`END_TIME_` as EndTime,
+X.`KPI_id` as KpiID,
+hour(TIMEDIFF(Y.`END_TIME_`,X.`START_TIME_`)) as DifferenzInStunden,
+DateDIFF(Y.`END_TIME_`,X.`START_TIME_`) as DifferenzInTagen,
+CASE WHEN (DateDIFF(Y.`END_TIME_`,X.`START_TIME_`) <= X.`KPI_VALUE`) THEN '0'
+ELSE '1' END as KpiBroken,
+'asdasdasd' as updateRun
+from 
 	(Select * from `JAR_EVENT_SELECTION_ACTIVITY_HISTORY` as A
 				inner join JAR_BK_WITH_INSTANCEIDS as O
 							ON A.`PROC_INST_ID_` = O.`InstanceID`

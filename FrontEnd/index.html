@@ -11,17 +11,24 @@
     <link rel="stylesheet" type="text/css" href="style.css">
   </head>
         <body>
-        <img src="../camundaKPI/resources/Element_2.png" width=20%> 
+                <img src="../camundaKPI/resources/Element_2.png" width=20%>         
         </br>
-        
+
         <div class="wrapper">
-        <div>
-        <div id="tasksPiechart" style="width: 800px; height: 400px;"></div>
-        <div id="historicTasksPiechart" style="width: 800px; height: 400px;"></div>
-        <div id="kpiEventChart" style="width: 800px; height: 400px;"></div></br>
-        <button id="showOnlyOneProcessTimeline" onclick="updateTimeLineWithOneBusinessKey()">Show Only One</button><input id="businessKeyInput" type="text">
-        </br>
-        <div id="timeLineChart" style="width: 800px; height: 500px;"></div>
+                <div class="first" id="kpiTable" style="width: 600px; height: 400px;"></div>
+                <div class="secound" id="tasksPiechart" style="width: 600px; height: 400px;"></div>
+        </div>
+        <div class="wrapper2">
+                <button id="showOnlyOneProcessTimeline" onclick="updateTimeLineWithOneBusinessKey()">Show Only One</button><input id="businessKeyInput" type="text">
+                <div class="first" id="timeLineChart" style="width: 600px; height: 900px;"></div>
+        </div>
+        <div class="wrapper">
+                <div class="first" id="historicTasksPiechart" style="width: 600px; height: 400px;"></div>
+                <div class="secound" id="kpiEventChart" style="width: 600px; height: 400px;"></div></br>
+        </div>
+
+
+        <div class="wrapper2">
         </div>
 </div>
         </body>

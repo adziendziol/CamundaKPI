@@ -1,11 +1,12 @@
 var historyTaskOverviewValuesTest = [];
-google.charts.load('current', {'packages':['corechart','timeline']});
+google.charts.load('current', {'packages':['corechart','timeline','table']});
 
 $(document).ready(function(){
     google.charts.setOnLoadCallback(startup)    
 });
 
 function startup(){
+       getKpiOverview(drawTableChart);
        getHistoryTasksCall(drawChart);
        getTasksCall(drawChart);
        getKpiEventsCall(drawChart);
@@ -70,4 +71,23 @@ function updateTimeLineWithOneBusinessKey(){
         var BusinessKey = document.getElementById('businessKeyInput').value
         console.log(BusinessKey)
         getSingleTimeLineInfos(BusinessKey,drawTimeLine)
+}
+
+function UpdateKpiReport(){
+        UpdateKpiReportCall()
+}
+
+function drawTableChart(values,title,elementID) {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Name');
+        data.addColumn('number', 'KPI-Wert (in Tagen)');
+        data.addColumn('boolean', 'KPI-Gehalten?');
+        data.addColumn('number', 'Anzahl');
+        data.addRows(values);
+        var options = {
+          title: title
+        };
+        var chart = new google.visualization.Table(document.getElementById(elementID));
+
+        chart.draw(data, options);
 }

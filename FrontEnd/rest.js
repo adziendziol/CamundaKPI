@@ -106,8 +106,6 @@ function getSingleTimeLineInfos(BusinessKeytoSend,callback){
         var KpiEventValues = [];
         var request = new XMLHttpRequest()
         console.log(BusinessKeytoSend.concat('---Function'));
-
-        // Open a new connection, using the GET request on the URL endpoint
         var url = 'http://127.0.0.1:5000/Processtimeline/'.concat(BusinessKeytoSend)
         console.log(url)
         request.open('GET', url, true)
@@ -130,3 +128,48 @@ function getSingleTimeLineInfos(BusinessKeytoSend,callback){
         request.send()
 }
 
+function UpdateKpiReportCall(){
+
+        var request = new XMLHttpRequest()
+        var url = 'http://127.0.0.1:5000/CreateKpiReport'
+        console.log(url)
+        request.open('GET', url, true)
+
+        request.onload = function() {
+                // Begin accessing JSON data here
+                var data = JSON.parse(this.response)
+                //KpiEventValues.push(['Business Key','Start','Ende'])
+                if (request.status >= 200 && request.status < 400) {
+                } else {
+                console.log('error')
+                }
+        }
+
+        request.send()
+}
+
+function getKpiOverview(callback){
+
+        var KpiEventValues = [];
+        var request = new XMLHttpRequest()
+        // Open a new connection, using the GET request on the URL endpoint
+        request.open('GET', 'http://127.0.0.1:5000/GetKpiOverview', true)
+
+        request.onload = function() {
+                // Begin accessing JSON data here
+                var data = JSON.parse(this.response)
+                console.log(data)
+                //KpiEventValues.push(['Business Key','Start','Ende'])
+                if (request.status >= 200 && request.status < 400) {
+                data.forEach(task => {
+                KpiEventValues.push([task.title,task.KPI_VALUE,Boolean(task.KpiBroken),task.Anzahl])
+                })
+                console.log(KpiEventValues);
+                callback(KpiEventValues,'Kpi Übersicht','kpiTable');
+                } else {
+                console.log('error')
+                }
+        }
+
+        request.send()
+}
